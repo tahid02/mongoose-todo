@@ -6,12 +6,11 @@ const todoSchema = mongoose.Schema({
     required: true,
   },
   description: String, // String is shorthand for {type: String}
-  title: {
+  status: {
     type: String,
     enum: ["active", "inactive"],
   },
   date: { type: Date, default: Date.now },
-  hidden: Boolean,
 });
 
 module.exports = todoSchema;

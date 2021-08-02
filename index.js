@@ -19,6 +19,7 @@ mongoose
 // application route
 
 app.use("/todo", todoHandler);
+// app.use("/", todoHandler);
 
 // custom error handler
 const errorHandler = (err, req, res, next) => {
