@@ -1,12 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
+const checkLogin = require("../middlewares/checkLogin");
 const todoSchema = require("../schemas/todoSchema");
 const Todo = new mongoose.model("Todo", todoSchema);
 
+// middle wares
+router.use(checkLogin);
 // get all the todo
 
-router.get("/", async (req, res) => {
+router.get("/", checkLogin, async (req, res) => {
+  // now, checkLogin middleware will work first and if there is no error ...
+  //then next() middleware will call ( here is third parameter's (req,res) function.. as it is also a middleware)
+  // if these middleware has any error , then the errorHandler middleware (in index.js file) will be called and will send response to the user\
+  // though we have created a custom errorHandler , at the very end there always have a errorHandler middleware by default
   try {
     await Todo.find({ status: "active" })
       .select({

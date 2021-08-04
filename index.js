@@ -14,7 +14,7 @@ mongoose
     `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.z6ers.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
-  .then(() => console.log("success"))
+  .then(() => console.log("mongoose connected"))
   .catch((err) => console.log(err));
 
 // application route
