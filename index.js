@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const todoHandler = require("./routeHandler/todoHandler");
+const userHandler = require("./routeHandler/userHandler");
 
 // express app initialization
 const app = express();
@@ -19,6 +20,7 @@ mongoose
 // application route
 
 app.use("/todo", todoHandler);
+app.use("/user", userHandler);
 // app.use("/", todoHandler);
 
 // custom error handler
