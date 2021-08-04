@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+require("dotenv").config();
 const userSchema = require("../schemas/userSchema");
 const User = new mongoose.model("User", userSchema);
 
@@ -33,7 +34,7 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.find({ userName: req.body.userName });
-    console.log({ user });
+    // console.log({ user });
     if (user && user.length) {
       // catch block won't handle if a condition is false.. because this is not code's execution failure.. So, we have to handle if condition is false, in else statement
       const isPasswordValid = await bcrypt.compare(
@@ -41,22 +42,39 @@ router.post("/login", async (req, res) => {
         req.body.password, // password provided by user , when trying to log in
         user[0].password // user hashed password which has taken from database
       );
+      //////////////////////////     TOKEN HAS CREATED HERE  (start) //////////////////////////////////////
       if (isPasswordValid) {
-      } else {
-        res.status(500).json({
-          error: `authentication failed`,
+        const token = jwt.sign(
+          {
+            userName: user[0].userName,
+            userId: user[0]._id,
+          },
+          process.env.JWT_TOKEN,
+          {
+            expiresIn: "1h",
+          }
+        );
+        console.log({ token });
+        res.status(200).json({
+          access_token: token,
+          message: "login successful ",
+        });
+      }
+      //////////////////////////     TOKEN HAS CREATED HERE  (start) //////////////////////////////////////
+      else {
+        res.status(401).json({
+          error: `authentication failed password`,
         });
       }
     } else {
-      res.status(500).json({
-        error: `authentication failed`,
+      res.status(401).json({
+        error: `authentication failed user`,
       });
     }
   } catch (error) {
-    res.status(500).json({
-      error: `authentication failed`,
+    res.status(401).json({
+      error: `authentication failed try ${error}`,
     });
-    console.log({ error });
   }
 });
 

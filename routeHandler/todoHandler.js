@@ -5,33 +5,35 @@ const todoSchema = require("../schemas/todoSchema");
 const Todo = new mongoose.model("Todo", todoSchema);
 
 // get all the todo
-router.get("/", async (req, res) => {
-  try {
-    await Todo.find({ status: "active" })
-      .select({
-        // we will get the documents accepts these properties
-        __v: 0,
-        date: 0,
-      })
-      .limit(2) // we will get only two documents
-      .exec((err, data) => {
-        if (err) {
-          console.log({ err });
-          res.status(500).json({
-            error: "there was an  error in fetching todo",
-          });
-        } else {
-          console.log("fetch success");
-          res.status(200).json({
-            result: data,
-            message: " todo fetched successfully",
-          });
-        }
-      });
-  } catch (err) {
-    res.send({ err });
-  }
-});
+
+// router.get("/", async (req, res) => {
+//   try {
+//     await Todo.find({ status: "active" })
+//       .select({
+//         // we will get the documents accepts these properties
+//         __v: 0,
+//         date: 0,
+//       })
+//       .limit(2) // we will get only two documents
+//       .exec((err, data) => {
+//         if (err) {
+//           console.log({ err });
+//           res.status(500).json({
+//             error: "there was an  error in fetching todo",
+//           });
+//         } else {
+//           console.log("fetch success");
+//           res.status(200).json({
+//             result: data,
+//             message: " todo fetched successfully",
+//           });
+//         }
+//       });
+//   } catch (err) {
+//     res.send({ err });
+//   }
+// });
+
 // get a todo by id
 router.get("/:id", async (req, res) => {
   try {
@@ -148,3 +150,16 @@ router.delete("/:id", async (req, res) => {
   }
 });
 module.exports = router;
+
+router.get("/", (req, res) => {
+  try {
+    const data = "hello world";
+
+    res.status(200).json({
+      result: data,
+      message: " todo fetched successfully",
+    });
+  } catch (err) {
+    res.send({ err });
+  }
+});
