@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
             userName: user[0].userName,
             userId: user[0]._id,
           },
-          process.env.JWT_TOKEN,
+          process.env.JWT_SECRET_KEY,
           {
             expiresIn: "1h",
           }
@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
           message: "login successful ",
         });
       }
-      //////////////////////////     TOKEN HAS CREATED HERE  (start) //////////////////////////////////////
+      //////////////////////////     TOKEN HAS CREATED HERE  (END) //////////////////////////////////////
       else {
         res.status(401).json({
           error: `authentication failed password`,
