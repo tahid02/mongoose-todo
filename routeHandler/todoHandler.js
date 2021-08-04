@@ -35,6 +35,7 @@ router.get("/", async (req, res) => {
 // get a todo by id
 router.get("/:id", async (req, res) => {
   try {
+    // const todoData=   Todo.find({ _id: req.params.id })// this will return  the founded document in an array
     await Todo.find({ _id: req.params.id }, (err, data) => {
       if (err) {
         console.log({ err });
@@ -146,5 +147,4 @@ router.delete("/:id", async (req, res) => {
     res.send({ err });
   }
 });
-router.use(express.json());
 module.exports = router;

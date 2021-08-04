@@ -13,10 +13,6 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  status: {
-    type: String,
-    enum: ["active", "inactive"],
-  },
 });
 
 module.exports = userSchema;
