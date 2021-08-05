@@ -15,7 +15,10 @@ router.get("/", checkLogin, async (req, res) => {
   // if these middleware has any error , then the errorHandler middleware (in index.js file) will be called and will send response to the user\
   // though we have created a custom errorHandler , at the very end there always have a errorHandler middleware by default
   try {
-    await Todo.find({ status: "active" })
+    await Todo.find({ status: "inactive" })
+      .populate("user", "user title -_id")
+      //parameter 1>> collection name("User") , we ref in schema
+      // parameter two > properties of the document , we want(user title)  and not(_id)
       .select({
         // we will get the documents accepts these properties
         __v: 0,
