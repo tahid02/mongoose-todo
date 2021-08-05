@@ -65,25 +65,20 @@ router.get("/:id", async (req, res) => {
 });
 
 // post a todo
-router.post("/", async (req, res) => {
+router.post("/", checkLogin, async (req, res) => {
+  console.log("request", req);
   try {
-    const newTodo = await new Todo(req.body);
-    console.log(req.body);
-    await newTodo.save((err) => {
-      if (err) {
-        console.log({ err });
-        res.status(500).json({
-          error: "there was an  error in posting todo",
-        });
-      } else {
-        console.log("post success");
-        res.status(200).json({
-          message: "post added successfully",
-        });
-      }
+    const newTodo = await new Todo({
+      ...req.body,
+      user: req.userId,
+    });
+    console.log(newTodo);
+    await newTodo.save();
+    res.status(200).json({
+      message: "post added successfully",
     });
   } catch (error) {
-    res.send(`post error ${error}`);
+    res.status(500).send(`todo post error ${error}`);
     console.log(error);
   }
 });

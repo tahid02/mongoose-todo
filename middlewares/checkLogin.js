@@ -6,6 +6,7 @@ const checkLogin = (req, res, next) => {
     // when one send token in GET query>>  const authorization = req.query.auth;
 
     const { authorization } = req.header;
+    // console.log(authorization);
 
     /*user will send this token in header like >>.
      headers: {
@@ -14,8 +15,9 @@ const checkLogin = (req, res, next) => {
       },
     */
     const token = authorization.split(" ")[1]; // taking only token
-    console.log({ token });
+    // console.log({ token });
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    console.log({ decoded });
     const { userName, userId } = decoded;
     req.userName = userName;
     req.userId = userId;
