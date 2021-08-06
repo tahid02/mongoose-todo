@@ -54,10 +54,8 @@ router.post("/login", async (req, res) => {
             expiresIn: "1h",
           }
         );
-        const userWithTodos = await User.find({
-          userName: req.body.userName,
-        }).populate("todos");
-        console.log({ token });
+        const userWithTodos = await user[0].populate("todos");
+        console.log({ token, userWithTodos });
         res.status(200).json({
           access_token: token,
           userData: userWithTodos,
