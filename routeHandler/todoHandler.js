@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const checkLogin = require("../middlewares/checkLogin");
+const [userHandler, User] = require("./userHandler");
 const todoSchema = require("../schemas/todoSchema");
 const Todo = new mongoose.model("Todo", todoSchema);
 
@@ -76,7 +77,16 @@ router.post("/", checkLogin, async (req, res) => {
       user: req.userId,
     });
     console.log(newTodo);
-    await newTodo.save();
+    const todo = await newTodo.save();
+    const updated = await User.updateOne(
+      { _id: req.userId },
+      {
+        $push: {
+          todos: todo._id,
+        },
+      }
+    );
+    console.log({ updated });
     res.status(200).json({
       message: "post added successfully",
     });

@@ -34,7 +34,7 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.find({ userName: req.body.userName });
-    // console.log({ user });
+    console.log({ user });
     if (user && user.length) {
       // catch block won't handle if a condition is false.. because this is not code's execution failure.. So, we have to handle if condition is false, in else statement
       const isPasswordValid = await bcrypt.compare(
@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
       );
       //////////////////////////     TOKEN HAS CREATED HERE  (start) //////////////////////////////////////
       if (isPasswordValid) {
-        const token = jwt.sign(
+        const token = await jwt.sign(
           {
             userName: user[0].userName,
             userId: user[0]._id,
@@ -54,28 +54,32 @@ router.post("/login", async (req, res) => {
             expiresIn: "1h",
           }
         );
+        const userWithTodos = await User.find({
+          userName: req.body.userName,
+        }).populate("todos");
         console.log({ token });
         res.status(200).json({
           access_token: token,
+          userData: userWithTodos,
           message: "login successful ",
         });
       }
       //////////////////////////     TOKEN HAS CREATED HERE  (END) //////////////////////////////////////
       else {
         res.status(401).json({
-          error: `authentication failed password`,
+          error: `authentication failed `,
         });
       }
     } else {
       res.status(401).json({
-        error: `authentication failed user`,
+        error: `authentication failed `,
       });
     }
   } catch (error) {
     res.status(401).json({
-      error: `authentication failed try ${error}`,
+      error: `authentication failed  ${error}`,
     });
   }
 });
 
-module.exports = router;
+module.exports = [router, User];
